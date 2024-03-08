@@ -15,24 +15,22 @@ public class ClienteRepositoryMock implements ClienteRepository {
 
 	@Override
 	public void inserir(ClienteEntity cliente) {
-		clientes.put(cliente.getNome(), cliente);
-		
+		clientes.put(cliente.getDocumento(), cliente);
 	}
 
 	@Override
 	public void alterar(ClienteEntity cliente) {
-		// TODO Auto-generated method stub
+		clientes.replace(cliente.getDocumento(), cliente);
+	}
+
+	@Override
+	public void excluir(String documento) {
+		clientes.remove(documento);
 		
 	}
 
 	@Override
-	public void excluir(ClienteEntity cliente) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ClienteEntity buscarPorNome(String nome) {
-		return clientes.get(nome);
+	public ClienteEntity buscarPorDocumento(String documento) {
+		return clientes.get(documento);
 	}
 }

@@ -6,6 +6,6 @@ public interface ClienteRepository {
 
 	void inserir(ClienteEntity cliente);
 	void alterar(ClienteEntity cliente);
-	void excluir(ClienteEntity cliente);
-	ClienteEntity buscarPorNome(String nome);
+	void excluir(String documento);
+	ClienteEntity buscarPorDocumento(String documento);
 }

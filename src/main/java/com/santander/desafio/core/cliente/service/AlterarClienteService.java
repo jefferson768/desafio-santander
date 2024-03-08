@@ -8,13 +8,16 @@ import com.santander.desafio.core.cliente.repository.ClienteRepository;
 import com.santander.desafio.core.shared.CasoUso;
 
 @Service
-public class BuscarClienteNomeService implements CasoUso<String, ClienteEntity> {
+public class AlterarClienteService implements CasoUso<ClienteEntity, Void> {
 	
 	@Autowired
 	private ClienteRepository repository;
 
 	@Override
-	public ClienteEntity executar(String nome) {
-		return repository.buscarPorNome(nome);
+	public Void executar(ClienteEntity cliente) {
+		
+		repository.alterar(cliente);
+		
+		return null;
 	}
 }
