@@ -54,7 +54,7 @@ public class ClienteController {
 	}
 	
 	@GetMapping("{documento}")
-	public ResponseEntity<ClienteEntity> buscarPorNome(@PathVariable String documento) {
+	public ResponseEntity<ClienteEntity> buscarPorDocumento(@PathVariable String documento) {
 		
 		ClienteEntity cliente = buscarClienteDocumentoClienteService.executar(documento);
 		return ResponseEntity.ok(cliente);
