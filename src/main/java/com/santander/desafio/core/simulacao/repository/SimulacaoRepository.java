@@ -6,6 +6,6 @@ import com.santander.desafio.core.simulacao.entity.SimulacaoEntity;
 
 public interface SimulacaoRepository {
 	
-	void inserir(SimulacaoEntity cliente);
+	void inserir(SimulacaoEntity simulacao);
 	List<SimulacaoEntity> buscarPorCliente(String documentoCliente);
 }
