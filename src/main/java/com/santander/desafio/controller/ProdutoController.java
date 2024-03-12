@@ -1,5 +1,7 @@
 package com.santander.desafio.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.santander.desafio.core.cliente.entity.ClienteEntity;
 import com.santander.desafio.core.produto.entity.ProdutoEntity;
 import com.santander.desafio.core.produto.service.AlterarProdutoService;
 import com.santander.desafio.core.produto.service.BuscarProdutoCodigoService;
 import com.santander.desafio.core.produto.service.CadastrarProdutoService;
 import com.santander.desafio.core.produto.service.ExcluirProdutoService;
+import com.santander.desafio.core.shared.PathConstants;
 
 @RestController
-@RequestMapping("/v1/produto")
+@RequestMapping(PathConstants.V1_PRODUTO)
 public class ProdutoController {
 	
 	@Autowired
@@ -36,9 +40,11 @@ public class ProdutoController {
 	private ExcluirProdutoService excluirProdutoService;
 	
 	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
-	public void salvar(@RequestBody ProdutoEntity produto) {
+	public ResponseEntity<ClienteEntity> salvar(@RequestBody ProdutoEntity produto) {
+		
 		cadastrarProdutoService.executar(produto);
+		
+		return buildResponse(produto);
 	}
 	
 	@PutMapping
@@ -49,14 +55,18 @@ public class ProdutoController {
 	
 	@DeleteMapping("{codigo}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public void editar(@PathVariable String codigo) {
+	public void excluir(@PathVariable String codigo) {
 		excluirProdutoService.executar(codigo);
 	}
 	
 	@GetMapping("{codigo}")
-	public ResponseEntity<ProdutoEntity> buscarPorDocumento(@PathVariable String codigo) {
+	public ResponseEntity<ProdutoEntity> buscarPorCodigo(@PathVariable String codigo) {
 		
 		ProdutoEntity produto = buscarProdutoCodigoService.executar(codigo);
 		return ResponseEntity.ok(produto);
+	}
+	
+	private ResponseEntity<ClienteEntity> buildResponse(ProdutoEntity produto) {
+		return ResponseEntity.created(URI.create(PathConstants.V1_PRODUTO.concat("/").concat(produto.getCodigo()))).build();
 	}
 }

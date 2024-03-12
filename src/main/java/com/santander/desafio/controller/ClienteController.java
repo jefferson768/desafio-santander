@@ -1,5 +1,7 @@
 package com.santander.desafio.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,10 @@ import com.santander.desafio.core.cliente.service.AlterarClienteService;
 import com.santander.desafio.core.cliente.service.BuscarClienteDocumentoService;
 import com.santander.desafio.core.cliente.service.CadastrarClienteService;
 import com.santander.desafio.core.cliente.service.ExcluirClienteService;
+import com.santander.desafio.core.shared.PathConstants;
 
 @RestController
-@RequestMapping("/v1/cliente")
+@RequestMapping(PathConstants.V1_CLIENTE)
 public class ClienteController {
 	
 	@Autowired
@@ -36,9 +39,11 @@ public class ClienteController {
 	private ExcluirClienteService excluirClienteService;
 	
 	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
-	public void salvar(@RequestBody ClienteEntity cliente) {
+	public ResponseEntity<ClienteEntity> salvar(@RequestBody ClienteEntity cliente) {
+		
 		cadastrarClienteService.executar(cliente);
+		
+		return buildResponse(cliente);
 	}
 	
 	@PutMapping
@@ -49,7 +54,7 @@ public class ClienteController {
 	
 	@DeleteMapping("{documento}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public void editar(@PathVariable String documento) {
+	public void excluir(@PathVariable String documento) {
 		excluirClienteService.executar(documento);
 	}
 	
@@ -58,5 +63,9 @@ public class ClienteController {
 		
 		ClienteEntity cliente = buscarClienteDocumentoClienteService.executar(documento);
 		return ResponseEntity.ok(cliente);
+	}
+	
+	private ResponseEntity<ClienteEntity> buildResponse(ClienteEntity cliente) {
+		return ResponseEntity.created(URI.create(PathConstants.V1_CLIENTE.concat("/").concat(cliente.getDocumento()))).build();
 	}
 }
